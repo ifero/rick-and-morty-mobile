@@ -1,24 +1,30 @@
 import { useQuery } from 'react-query';
 import { httpClient } from './httpClient';
+import { CharactersResponse } from './types';
 
 export const CHARACTERS_KEY = 'characters';
 
 export const useGetCharacters = () => {
   const query = `{
-        characters {
-            info {
-                count
-            }
-            results {
-                name
-            }
-        }
-    }`;
+    characters(page: 1) {
+      info {
+        count,
+        pages,
+        next
+      }
+      results {
+        name,
+        id,
+        status,
+        image
+      }
+    }
+  }`;
 
   const fetcher = async () =>
-    httpClient.post('', { query }).then(res => res.data);
+    httpClient.post<CharactersResponse>('', { query }).then(res => res.data);
 
-  const queryResult = useQuery(CHARACTERS_KEY, fetcher);
+  const queryResult = useQuery<CharactersResponse>(CHARACTERS_KEY, fetcher);
 
-  return queryResult;
+  return { ...queryResult, data: queryResult.data?.data.characters };
 };
