@@ -1,0 +1,24 @@
+name: PR checks
+on:
+  pull_request:
+
+jobs:
+  pr-checks:
+    runs-on: ubuntu-lates
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Check linter
+        run: yarn lint
+
+      - name: Check typescript
+        run: yarn typescript
+
+      - name: Run unit tests
+        run: yarn test --bail
