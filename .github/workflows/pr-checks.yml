@@ -21,4 +21,4 @@ jobs:
         run: yarn typescript
 
       - name: Run unit tests
-        run: yarn test --bail
+        run: yarn test --bail --forceExit
