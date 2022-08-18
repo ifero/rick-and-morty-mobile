@@ -5,6 +5,7 @@ import {
   View,
   SafeAreaView,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProps } from 'navigation/types';
@@ -14,8 +15,11 @@ import CharacterItem from './CharacterItem';
 
 const Separator: FC = () => <View style={styles.separator} />;
 
+const BottomLoader: FC = () => <ActivityIndicator size="large" />;
+
 const CharactersList: FC = () => {
-  const { data } = useGetCharacters();
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useGetCharacters();
 
   const { navigate } = useNavigation<NavigationProps>();
 
@@ -33,13 +37,20 @@ const CharactersList: FC = () => {
     <CharacterItem {...item} onPress={onCharacterPress} />
   );
 
+  const onEndReached = useCallback(() => {
+    hasNextPage && !isFetchingNextPage && fetchNextPage();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
   return (
     <SafeAreaView>
       <FlatList
-        data={data?.results}
+        testID="CharactersList"
+        data={data}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         ItemSeparatorComponent={Separator}
+        ListFooterComponent={isFetchingNextPage ? BottomLoader : undefined}
+        onEndReached={onEndReached}
       />
     </SafeAreaView>
   );

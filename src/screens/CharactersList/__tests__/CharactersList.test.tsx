@@ -1,9 +1,12 @@
 import { fireEvent } from '@testing-library/react-native';
 import * as httpHooks from 'utils/http/hooks';
+import { CharacterListDetails } from 'utils/http/types';
 import { renderWithHttpClient } from 'utils/testing/helper';
 import CharactersList from '../CharactersList';
 
 const mockNavigate = jest.fn();
+
+const mockFetchNext = jest.fn();
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
@@ -11,7 +14,7 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }));
 
-const returnedCharacters = [
+const returnedCharacters: CharacterListDetails[] = [
   {
     name: 'Rick Sanchez',
     id: 1,
@@ -75,10 +78,10 @@ const returnedCharacters = [
 ];
 
 jest.spyOn(httpHooks, 'useGetCharacters').mockReturnValue({
-  data: {
-    info: { count: 826, pages: 42, next: 2 },
-    results: returnedCharacters,
-  },
+  data: returnedCharacters,
+  isFetchingNextPage: false,
+  hasNextPage: true,
+  fetchNextPage: mockFetchNext,
 } as any);
 
 describe('Given a CharactersList component', () => {
@@ -99,6 +102,16 @@ describe('Given a CharactersList component', () => {
       expect(mockNavigate).toHaveBeenCalledWith('CharacterDetails', {
         characterID: 1,
       });
+    });
+
+    it('should fetch next page, when onEndReached is triggered', () => {
+      const { getByTestId } = renderWithHttpClient(<CharactersList />);
+
+      expect(mockFetchNext).not.toHaveBeenCalled();
+
+      fireEvent(getByTestId('CharactersList'), 'onEndReached');
+
+      expect(mockFetchNext).toHaveBeenCalledTimes(1);
     });
   });
 });
