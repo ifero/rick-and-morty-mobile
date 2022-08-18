@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { QueryFunction, useInfiniteQuery } from 'react-query';
+import { QueryFunction, useInfiniteQuery, useQuery } from 'react-query';
 import { httpClient } from './httpClient';
-import { CharacterListDetails, CharactersResponse } from './types';
+import {
+  Character,
+  CharacterListDetails,
+  CharacterResponse,
+  CharactersResponse,
+} from './types';
 
 export const CHARACTERS_KEY = 'characters';
 
@@ -55,4 +60,37 @@ export const useGetCharacters = () => {
     data,
     dataTotale: queryResult.data?.pages[0].data.characters,
   };
+};
+
+export const useGetCharacter = (characterId: number) => {
+  const query = `{
+    character(id: ${characterId}) {
+      name,
+      status,
+      species,
+      type,
+      gender,
+      origin {
+        id,
+        name,
+      },
+      location {
+        id,
+        name,
+      }
+      image,
+      episode {
+        name,
+      },
+      created,
+    }
+  }`;
+  const fetcher = () => httpClient.post('', { query }).then(res => res.data);
+
+  const queryResult = useQuery<CharacterResponse>(
+    ['character', characterId],
+    fetcher,
+  );
+
+  return { ...queryResult, data: queryResult.data?.data.character };
 };

@@ -9,9 +9,25 @@ export type Status = 'Alive' | 'Dead' | 'unknown';
 
 export type Gender = 'Male' | 'Female' | 'Genderless' | 'unknown';
 
-export type Origin = {};
+export type Location = {
+  id: number;
+  name: string;
+  type: string;
+  dimentions: string;
+  residents: Character[];
+  url: string;
+  created: string;
+};
 
-export type Location = {};
+export type Episode = {
+  id: number;
+  name: string;
+  air_date: string;
+  episode: string;
+  characters: Character[];
+  url: string;
+  created: string;
+};
 
 export type Character = {
   name: string;
@@ -20,10 +36,10 @@ export type Character = {
   species: string;
   type: string;
   gender: Gender;
-  origin: Origin;
+  origin: Location;
   location: Location;
   image: string;
-  episode: string[];
+  episode: Episode[];
   url: string;
   created: string;
 };
@@ -41,5 +57,11 @@ export type Characters = {
 export type CharactersResponse = {
   data: {
     characters: Characters;
+  };
+};
+
+export type CharacterResponse = {
+  data: {
+    character: Character;
   };
 };
