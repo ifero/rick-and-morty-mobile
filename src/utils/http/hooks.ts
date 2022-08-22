@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { QueryFunction, useInfiniteQuery, useQuery } from 'react-query';
 import { httpClient } from './httpClient';
 import {
-  Character,
   CharacterListDetails,
   CharacterResponse,
   CharactersResponse,
@@ -11,8 +10,6 @@ import {
 export const CHARACTERS_KEY = 'characters';
 
 export const useGetCharacters = () => {
-  const [data, setData] = useState<CharacterListDetails[]>([]);
-
   const fetcher: QueryFunction<CharactersResponse> = async ({
     pageParam = 0,
   }) => {
@@ -44,21 +41,20 @@ export const useGetCharacters = () => {
     },
   );
 
-  useEffect(() => {
-    setData(
+  const data = useMemo(
+    () =>
       queryResult.data?.pages.reduce<CharacterListDetails[]>(
         (prev, current) => {
           return [...prev, ...current.data.characters.results];
         },
         [],
       ) || [],
-    );
-  }, [queryResult.data?.pages]);
+    [queryResult.data?.pages],
+  );
 
   return {
     ...queryResult,
     data,
-    dataTotale: queryResult.data?.pages[0].data.characters,
   };
 };
 
