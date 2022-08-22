@@ -4,6 +4,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
   Text,
 } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
@@ -19,7 +20,7 @@ const CharacterDetails: FC = () => {
 
   if (isFetching) {
     return (
-      <SafeAreaView>
+      <SafeAreaView testID="CharacterDetails-EmptyScreen">
         <ActivityIndicator size="large" />
       </SafeAreaView>
     );
@@ -38,9 +39,9 @@ const CharacterDetails: FC = () => {
   } = data!;
 
   return (
-    <SafeAreaView>
+    <SafeAreaView testID="CharacterDetails">
       <ScrollView>
-        <Image source={{ uri: image }} style={{ width: 124, height: 124 }} />
+        <Image source={{ uri: image }} style={styles.image} />
         <Text>{name}</Text>
         <Text>{gender}</Text>
         <Text>{species}</Text>
@@ -54,5 +55,9 @@ const CharacterDetails: FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  image: { width: 124, height: 124 },
+});
 
 export default CharacterDetails;
