@@ -8,7 +8,7 @@ import { render } from '@testing-library/react-native';
 import { QueryClientProvider } from 'react-query';
 import { queryClient } from 'utils/http/httpClient';
 
-const QueryClientWrapper: FC<PropsWithChildren> = ({ children }) => (
+export const QueryClientWrapper: FC<PropsWithChildren> = ({ children }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
