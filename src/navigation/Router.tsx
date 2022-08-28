@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Landing from 'screens/Landing';
 import CharactersList from 'screens/CharactersList';
 import CharacterDetails from 'screens/CharacterDetails';
+import CharacterHeader from 'screens/CharacterDetails/CharacterHeader';
 import { RootStackParamList } from './types';
 
 const { Navigator, Screen } = createNativeStackNavigator<RootStackParamList>();
@@ -25,7 +26,11 @@ const Router: FC = () => {
         <Screen
           name="CharacterDetails"
           component={CharacterDetails}
-          options={{ title: '' }}
+          options={({ route }) => ({
+            headerTitle: () => (
+              <CharacterHeader characterID={route.params.characterID} />
+            ),
+          })}
         />
       </Navigator>
     </NavigationContainer>
