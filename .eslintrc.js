@@ -42,6 +42,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/no-unstable-nested-components': ['warn', { allowAsProps: true }],
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
     'no-unused-vars': 'off',
