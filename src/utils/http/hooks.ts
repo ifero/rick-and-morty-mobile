@@ -76,6 +76,7 @@ export const useGetCharacter = (characterId: number) => {
       }
       image,
       episode {
+        id,
         name,
       },
       created,
