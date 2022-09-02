@@ -7,6 +7,9 @@ jest.mock('@react-navigation/native', () => ({
   useRoute: () => ({
     params: { characterID: 42 },
   }),
+  useNavigation: () => ({
+    setOptions: jest.fn,
+  }),
 }));
 
 const mockCharacterResponse = (isFetching: boolean) =>
@@ -54,11 +57,12 @@ describe('Given a CharacterDetails component', () => {
     it('should show the correct data', () => {
       const { getByText } = screen;
 
-      expect(getByText('Test name')).toBeDefined();
       expect(getByText('Female')).toBeDefined();
       expect(getByText('Some species')).toBeDefined();
-      expect(getByText('Number of episodes: 2')).toBeDefined();
-      expect(getByText('First appearance: Episode Name 1')).toBeDefined();
+      expect(getByText('Number of episodes')).toBeDefined();
+      expect(getByText('2')).toBeDefined();
+      expect(getByText('First appearance')).toBeDefined();
+      expect(getByText('Episode Name 1')).toBeDefined();
     });
   });
 });
